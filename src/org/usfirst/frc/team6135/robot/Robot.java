@@ -3,6 +3,7 @@ package org.usfirst.frc.team6135.robot;
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -26,8 +27,8 @@ public class Robot extends IterativeRobot {
 	public static OI oi;
 	Encoder leftEnc=new Encoder(0,1,true,Encoder.EncodingType.k2X);
 	Encoder rightEnc=new Encoder(2,3,false,Encoder.EncodingType.k2X);
-	Victor leftDrive=new Victor(0);
-	Victor rightDrive=new Victor(1);
+	Joystick j=new Joystick(0);
+	Drive drive = new Drive(j, RobotMap.lVicPort, RobotMap.rVicPort);
 	Command autonomousCommand;
 	SendableChooser<Command> chooser = new SendableChooser<>();
 
@@ -109,8 +110,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
-		leftDrive.set(0.3);
-		rightDrive.set(-0.3);
+		drive.teleopDrive();
 		System.out.println(leftEnc.getRate());
 		System.out.println(rightEnc.getRate());
 	}
