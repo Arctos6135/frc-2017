@@ -21,13 +21,22 @@ public class Drive implements PIDOutput {
 	private double xFinal;
 	private double yFinal;
 	private double scale = 1.0;
+	private double speed = 1.0;
+	private static boolean straight = true;//If true drive straight; if false rotate to correct angle
+	
 	//Constants
-	private static final double kP = 0.03;
-    private static final double kI = 0.00;
-    private static final double kD = 0.00;
-    private static final double kF = 0.00;
-	private static final double kToleranceDegrees = 2.0f;
+	private static final double kPS = 0.03;//Driving straight
+    private static final double kIS = 0.00;
+    private static final double kDS = 0.00;
+    private static final double kFS = 0.00;
+	private static final double kToleranceDegreesS = 2.0f;
     
+	private static final double kPR = 0.03;//Rotating to angle
+    private static final double kIR = 0.00;
+    private static final double kDR = 0.00;
+    private static final double kFR = 0.00;
+	private static final double kToleranceDegreesR = 2.0f;
+	
 	private static final int yAxis = 1;
 	private static final int yReverse = -1;
 	private static final int xAxis = 0;
@@ -57,19 +66,29 @@ public class Drive implements PIDOutput {
         } catch (RuntimeException ex ) {
             DriverStation.reportError("Error instantiating navX MXP:  " + ex.getMessage(), true);
         }
-		balance = new PIDController(kP, kI, kD, kF, ahrs, this);
+		balance = new PIDController(kPS, kIS, kDS, kFS, ahrs, this);
 		balance.setSetpoint(0.0f);
 		balance.setInputRange(-180.0f,  180.0f);
         balance.setOutputRange(0.5, 2.0);
-        balance.setAbsoluteTolerance(kToleranceDegrees);
+        balance.setAbsoluteTolerance(kToleranceDegreesS);
         balance.setContinuous(true);
 		balance.enable();
 	}
-	
+	public void setRotate(double angle) {
+		balance.setPID(kPR, kIR, kDR, kFR);
+		balance.setAbsoluteTolerance(kToleranceDegreesR);
+		straight = false;
+		balance.setSetpoint(angle);
+	}
+	public void setStraight() {
+		balance.setPID(kPS, kIS, kDS, kFS);
+		balance.setAbsoluteTolerance(kToleranceDegreesS);
+		straight = true;
+	}
 	//Direct object access methods
 	public void setMotors(double l, double r) {//sets motor speeds accounting for directions of motors
-		leftDrive.set(scale * l);
-		rightDrive.set(scale * r);
+		leftDrive.set(speed * l / scale);
+		rightDrive.set(speed * scale * r);
 	}
 	public void setLeft(double d) {
 		leftDrive.set(d);
@@ -169,6 +188,13 @@ public class Drive implements PIDOutput {
 		}
 	}
 	public void pidWrite(double output) {
-        scale = output;
+		if(straight) {
+			scale = output;
+			speed = 1.0;
+		}
+		else {
+			speed = output;
+			scale = 1.0;
+		}
     }
 }

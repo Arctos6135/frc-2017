@@ -4,6 +4,7 @@ package org.usfirst.frc.team6135.robot;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -31,17 +32,20 @@ public class Robot extends IterativeRobot {
 	Drive drive = new Drive(j, RobotMap.lVicPort, RobotMap.rVicPort);
 	Command autonomousCommand;
 	SendableChooser<Command> chooser = new SendableChooser<>();
-
+	int counter=0;
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
 	 */
+	PowerDistributionPanel pdp = new PowerDistributionPanel();//STEPHEN WROTE THIS------------------------
 	@Override
 	public void robotInit() {
 		oi = new OI();
 		chooser.addDefault("Default Auto", new ExampleCommand());
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", chooser);
+		rightEnc.setDistancePerPulse(6*3.14/48);
+		leftEnc.setDistancePerPulse(6*3.14/48);
 	}
 
 	/**
@@ -92,6 +96,35 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
+		if(counter<134)
+		{
+			drive.setMotors(1.0,1.0);
+		}
+		else
+		{
+			if(counter<268)
+			{
+				drive.setLeft(1.0);
+				drive.setRight(0);
+			}
+			else
+			{
+				if(counter<402)
+				{
+					drive.setRight(1.0);
+					drive.setLeft(0);
+				}
+			}
+		}
+		counter++;
+		SmartDashboard.putNumber("Left Encoder: ",(leftEnc.getRate()/2));
+		SmartDashboard.putNumber("Right Encoder: ", -(rightEnc.getRate()/96));
+		
+		SmartDashboard.putNumber("Current: ", pdp.getTotalCurrent());
+		SmartDashboard.putNumber("Voltage: ", pdp.getVoltage());
+		SmartDashboard.putNumber("Power: ", pdp.getTotalPower());
+		SmartDashboard.putNumber("Energy: ", pdp.getTotalEnergy());
+		SmartDashboard.putNumber("Temperature: ", pdp.getTemperature());
 	}
 
 	@Override
@@ -110,9 +143,14 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
-		drive.teleopDrive();
-		System.out.println(leftEnc.getRate());
-		System.out.println(rightEnc.getRate());
+		//drive.teleopDrive();
+		//drive.setMotors(1.0,-1.0);
+		drive.setRight(1.0);
+		SmartDashboard.putNumber("Left Encoder: ",leftEnc.getRate()/48);
+		SmartDashboard.putNumber("Right Encoder: ", rightEnc.getRate()/48);
+		
+		System.out.println(leftEnc.getRate()/48); //48 pulses
+		System.out.println(rightEnc.getRate()/48); //48 pulses
 	}
 
 	/**
