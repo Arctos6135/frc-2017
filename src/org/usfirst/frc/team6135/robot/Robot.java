@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -32,6 +33,7 @@ public class Robot extends IterativeRobot {
 	Drive drive = new Drive(j, RobotMap.lVicPort, RobotMap.rVicPort);
 	Command autonomousCommand;
 	SendableChooser<Command> chooser = new SendableChooser<>();
+	Spark shooterMoter=new Spark(9);
 	int counter=0;
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -145,12 +147,39 @@ public class Robot extends IterativeRobot {
 		Scheduler.getInstance().run();
 		//drive.teleopDrive();
 		//drive.setMotors(1.0,-1.0);
-		drive.setRight(1.0);
+		double sliderVal=j.getRawAxis(3);
+		shooterMoter.set(Math.max(0.0,sliderVal));
+		SmartDashboard.putNumber("shooterVal", sliderVal);
+		System.out.println(sliderVal);
+		SmartDashboard.putNumber("Port 0 Current", pdp.getCurrent(0));
+		SmartDashboard.putNumber("Port 1 Current", pdp.getCurrent(1));
+		SmartDashboard.putNumber("Port 2 Current", pdp.getCurrent(2));
+		SmartDashboard.putNumber("Port 3 Current", pdp.getCurrent(3));
+		SmartDashboard.putNumber("Port 4 Current", pdp.getCurrent(4));
+		SmartDashboard.putNumber("Port 5 Current", pdp.getCurrent(5));
+		SmartDashboard.putNumber("Port 6 Current", pdp.getCurrent(6));
+		SmartDashboard.putNumber("Port 7 Current", pdp.getCurrent(7));
+		SmartDashboard.putNumber("Port 8 Current", pdp.getCurrent(8));
+		SmartDashboard.putNumber("Port 9 Current", pdp.getCurrent(9));
+		SmartDashboard.putNumber("Port 10 Current", pdp.getCurrent(10));
+		SmartDashboard.putNumber("Port 11 Current", pdp.getCurrent(11));
+		SmartDashboard.putNumber("Port 12 Current", pdp.getCurrent(12));
+		SmartDashboard.putNumber("Port 13 Current", pdp.getCurrent(13));
+		SmartDashboard.putNumber("Port 14 Current", pdp.getCurrent(14));
+		SmartDashboard.putNumber("Port 15 Current", pdp.getCurrent(15));
+		
+		//drive.setRight(1.0);
 		SmartDashboard.putNumber("Left Encoder: ",leftEnc.getRate()/48);
 		SmartDashboard.putNumber("Right Encoder: ", rightEnc.getRate()/48);
 		
-		System.out.println(leftEnc.getRate()/48); //48 pulses
-		System.out.println(rightEnc.getRate()/48); //48 pulses
+		//System.out.println(leftEnc.getRate()/48); //48 pulses
+		//System.out.println(rightEnc.getRate()/48); //48 pulses
+		
+		SmartDashboard.putNumber("Current: ", pdp.getTotalCurrent());
+		SmartDashboard.putNumber("Voltage: ", pdp.getVoltage());
+		SmartDashboard.putNumber("Power: ", pdp.getTotalPower());
+		SmartDashboard.putNumber("Energy: ", pdp.getTotalEnergy());
+		SmartDashboard.putNumber("Temperature: ", pdp.getTemperature());
 	}
 
 	/**
