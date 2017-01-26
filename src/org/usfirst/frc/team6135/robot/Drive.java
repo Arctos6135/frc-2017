@@ -88,7 +88,8 @@ public class Drive implements PIDOutput {
 	//Direct object access methods
 	public void setMotors(double l, double r) {//sets motor speeds accounting for directions of motors
 		leftDrive.set(speed * l / scale);
-		rightDrive.set(speed * scale * r);
+		//rightDrive.set(speed * scale * r); //COMMMENTED BY MELVIN
+		rightDrive.set(speed * r / scale );
 	}
 	public void setLeft(double d) {
 		leftDrive.set(d);

@@ -34,12 +34,14 @@ public class Robot extends IterativeRobot {
 	Command autonomousCommand;
 	SendableChooser<Command> chooser = new SendableChooser<>();
 	Spark shooterMoter=new Spark(9);
-	int counter=0;
+	PowerDistributionPanel pdp = new PowerDistributionPanel();
+	double sliderVal;
+	int counter;
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
 	 */
-	PowerDistributionPanel pdp = new PowerDistributionPanel();//STEPHEN WROTE THIS------------------------
+	
 	@Override
 	public void robotInit() {
 		oi = new OI();
@@ -98,35 +100,23 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
-		if(counter<134)
-		{
-			drive.setMotors(1.0,1.0);
+		
+		counter = 0; //will ++ per method loop iteration; per packet sent; per ~20ms
+		if(counter < 100) { //~2s
+			drive.setMotors(1.0,1.0); //both forward
 		}
-		else
-		{
-			if(counter<268)
-			{
-				drive.setLeft(1.0);
-				drive.setRight(0);
-			}
-			else
-			{
-				if(counter<402)
-				{
-					drive.setRight(1.0);
-					drive.setLeft(0);
-				}
-			}
+		else if (counter<200) { //~4s
+			drive.setMotors(1.0, 0.0); //left fwd
+		}
+		else if(counter<300) { //~6s
+			drive.setMotors(0.0, 1.0); //right fwd
+		}
+		else {
+			drive.setMotors(0.0, 0.0); //stop
 		}
 		counter++;
-		SmartDashboard.putNumber("Left Encoder: ",(leftEnc.getRate()/2));
-		SmartDashboard.putNumber("Right Encoder: ", -(rightEnc.getRate()/96));
 		
-		SmartDashboard.putNumber("Current: ", pdp.getTotalCurrent());
-		SmartDashboard.putNumber("Voltage: ", pdp.getVoltage());
-		SmartDashboard.putNumber("Power: ", pdp.getTotalPower());
-		SmartDashboard.putNumber("Energy: ", pdp.getTotalEnergy());
-		SmartDashboard.putNumber("Temperature: ", pdp.getTemperature());
+		printValuesOnDashboard(); //updates values on SmartDashboard
 	}
 
 	@Override
@@ -144,42 +134,15 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		Scheduler.getInstance().run();
-		//drive.teleopDrive();
-		//drive.setMotors(1.0,-1.0);
-		double sliderVal=j.getRawAxis(3);
-		shooterMoter.set(Math.max(0.0,sliderVal));
-		SmartDashboard.putNumber("shooterVal", sliderVal);
-		System.out.println(sliderVal);
-		SmartDashboard.putNumber("Port 0 Current", pdp.getCurrent(0));
-		SmartDashboard.putNumber("Port 1 Current", pdp.getCurrent(1));
-		SmartDashboard.putNumber("Port 2 Current", pdp.getCurrent(2));
-		SmartDashboard.putNumber("Port 3 Current", pdp.getCurrent(3));
-		SmartDashboard.putNumber("Port 4 Current", pdp.getCurrent(4));
-		SmartDashboard.putNumber("Port 5 Current", pdp.getCurrent(5));
-		SmartDashboard.putNumber("Port 6 Current", pdp.getCurrent(6));
-		SmartDashboard.putNumber("Port 7 Current", pdp.getCurrent(7));
-		SmartDashboard.putNumber("Port 8 Current", pdp.getCurrent(8));
-		SmartDashboard.putNumber("Port 9 Current", pdp.getCurrent(9));
-		SmartDashboard.putNumber("Port 10 Current", pdp.getCurrent(10));
-		SmartDashboard.putNumber("Port 11 Current", pdp.getCurrent(11));
-		SmartDashboard.putNumber("Port 12 Current", pdp.getCurrent(12));
-		SmartDashboard.putNumber("Port 13 Current", pdp.getCurrent(13));
-		SmartDashboard.putNumber("Port 14 Current", pdp.getCurrent(14));
-		SmartDashboard.putNumber("Port 15 Current", pdp.getCurrent(15));
+		Scheduler.getInstance().run(); //scheduler singleton instance currently empty; used for command-based
+		drive.teleopDrive(); //refer to Drive.java teleopDrive method
+		drive.setMotors(-0.5, 0.5); //placeholder, teleop instructions will be put here
 		
-		//drive.setRight(1.0);
-		SmartDashboard.putNumber("Left Encoder: ",leftEnc.getRate()/48);
-		SmartDashboard.putNumber("Right Encoder: ", rightEnc.getRate()/48);
+		sliderVal = j.getRawAxis(3); //gets value from slider
+		shooterMoter.set(Math.max(0.0,sliderVal)); //Math.max to prevent input of negative values
 		
-		//System.out.println(leftEnc.getRate()/48); //48 pulses
-		//System.out.println(rightEnc.getRate()/48); //48 pulses
-		
-		SmartDashboard.putNumber("Current: ", pdp.getTotalCurrent());
-		SmartDashboard.putNumber("Voltage: ", pdp.getVoltage());
-		SmartDashboard.putNumber("Power: ", pdp.getTotalPower());
-		SmartDashboard.putNumber("Energy: ", pdp.getTotalEnergy());
-		SmartDashboard.putNumber("Temperature: ", pdp.getTemperature());
+		System.out.println(sliderVal); //prints to console on driver station; debugging/testing purposes
+		printValuesOnDashboard(); //updates values on SmartDashboard
 	}
 
 	/**
@@ -188,5 +151,23 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void testPeriodic() {
 		LiveWindow.run();
+	}
+	
+	public void printValuesOnDashboard() {
+		//putNumber prints respective values to the SmartDashboard
+		SmartDashboard.putNumber("shooterVal", sliderVal);
+				
+		SmartDashboard.putNumber("Left Encoder: ",leftEnc.getRate()/48);
+		SmartDashboard.putNumber("Right Encoder: ", rightEnc.getRate()/48);
+		//prints current drawn from all PDP ports 0-15
+		for (int i = 0; i <= 15; i++) {
+			SmartDashboard.putNumber("Port " + i + " Current", pdp.getCurrent(i));
+		}
+				
+		SmartDashboard.putNumber("Current: ", pdp.getTotalCurrent());
+		SmartDashboard.putNumber("Voltage: ", pdp.getVoltage());
+		SmartDashboard.putNumber("Power: ", pdp.getTotalPower());
+		SmartDashboard.putNumber("Energy: ", pdp.getTotalEnergy());
+		SmartDashboard.putNumber("Temperature: ", pdp.getTemperature());		
 	}
 }
