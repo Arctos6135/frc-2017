@@ -21,7 +21,7 @@ public class RobotMap {
 	public static final int rVicPort = 1;
 	public static final int lVicPort = 0;
 	
-	//Victors for Robot Arm
+	//Victors fo r Robot Arm
 	public static final int wVicPort = 2;
 	
 	//Motor Controllers for shooter

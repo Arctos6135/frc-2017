@@ -1,6 +1,9 @@
 
 package org.usfirst.frc.team6135.robot;
+import com.ctre.CANTalon;
+import com.ctre.CANTalon.FeedbackDevice;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
@@ -14,7 +17,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team6135.robot.commands.ExampleCommand;
+import org.usfirst.frc.team6135.robot.subsystems.AutoDrive;
 import org.usfirst.frc.team6135.robot.subsystems.ExampleSubsystem;
+
+
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -27,14 +33,15 @@ public class Robot extends IterativeRobot {
 
 	public static final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
 	public static OI oi;
-	Encoder leftEnc=new Encoder(0,1,true,Encoder.EncodingType.k2X);
-	Encoder rightEnc=new Encoder(2,3,false,Encoder.EncodingType.k2X);
+	CANTalon test = new CANTalon(0);
 	Joystick j=new Joystick(0);
 	Drive drive = new Drive(j, RobotMap.lVicPort, RobotMap.rVicPort);
+	AutoDrive auto = new AutoDrive(0, 1, 2, 3, drive);
 	Command autonomousCommand;
-	SendableChooser<Command> chooser = new SendableChooser<>();
+	SendableChooser<Command> chooser = new SendableChooser<Command>();
 	Spark shooterMoter=new Spark(9);
 	PowerDistributionPanel pdp = new PowerDistributionPanel();
+	DigitalInput limitSwitch = new DigitalInput(9);
 	double sliderVal;
 	int counter;
 	/**
@@ -46,15 +53,13 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		oi = new OI();
 		chooser.addDefault("Default Auto", new ExampleCommand());
-		// chooser.addObject("My Auto", new MyAutoCommand());
+		//chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", chooser);
-		rightEnc.setDistancePerPulse(6*3.14/48);
-		leftEnc.setDistancePerPulse(6*3.14/48);
 	}
 
 	/**
 	 * This function is called once each time the robot enters Disabled mode.
-	 * You can use it to reset any subsystem information you want to clear when
+	 * You use it to reset any subsystem information you want to clear when
 	 * the robot is disabled.
 	 */
 	@Override
@@ -80,7 +85,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		autonomousCommand = chooser.getSelected();
+		//autonomusCommand = chooser.getSelected();
 
 		/*
 		 * String autoSelected = SmartDashboard.getString("Auto Selector",
@@ -90,8 +95,8 @@ public class Robot extends IterativeRobot {
 		 */
 
 		// schedule the autonomous command (example)
-		if (autonomousCommand != null)
-			autonomousCommand.start();
+		//if (autonomousCommand != null)
+		//	autonomousCommand.start();
 	}
 
 	/**
@@ -100,22 +105,35 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
-		
-		counter = 0; //will ++ per method loop iteration; per packet sent; per ~20ms
-		if(counter < 100) { //~2s
-			drive.setMotors(1.0,1.0); //both forward
+		/*switch (mode) {
+		//	case 1:
+				counter = 0; //will ++ per method loop iteration; per packet sent; per ~20ms
+				if(counter < 100) { //~2s
+					drive.setMotors(1.0,1.0); //both forward
+				}
+				else if (counter<200) { //~4s
+					drive.setMotors(1.0, 0.0); //left fwd
+				}
+				else if(counter<300) { //~6s
+					drive.setMotors(0.0, 1.0); //right fwd
+				}
+				else {
+					drive.setMotors(0.0, 0.0); //stop
+				}
+				counter++;
+				
+		/*		break;
+			case 2:
+				counter = 0;
+				if (counter < 500)
+					drive.setMotors(-1.0, -1.0);
+				else
+					drive.setMotors(0.0, 0.0);
+				counter++;
+				
+				break;
 		}
-		else if (counter<200) { //~4s
-			drive.setMotors(1.0, 0.0); //left fwd
-		}
-		else if(counter<300) { //~6s
-			drive.setMotors(0.0, 1.0); //right fwd
-		}
-		else {
-			drive.setMotors(0.0, 0.0); //stop
-		}
-		counter++;
-		
+		*/
 		printValuesOnDashboard(); //updates values on SmartDashboard
 	}
 
@@ -125,6 +143,7 @@ public class Robot extends IterativeRobot {
 		// teleop starts running. If you want the autonomous to
 		// continue until interrupted by another command, remove
 		// this line or comment it out.
+		test.setFeedbackDevice(FeedbackDevice.QuadEncoder);
 		if (autonomousCommand != null)
 			autonomousCommand.cancel();
 	}
@@ -136,29 +155,29 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run(); //scheduler singleton instance currently empty; used for command-based
 		drive.teleopDrive(); //refer to Drive.java teleopDrive method
-		drive.setMotors(-0.5, 0.5); //placeholder, teleop instructions will be put here
-		
+		/*drive.setMotors(-0.5, 0.5); //placeholder, teleop instructions will be put here
+		drive.setStraight();
 		sliderVal = j.getRawAxis(3); //gets value from slider
 		shooterMoter.set(Math.max(0.0,sliderVal)); //Math.max to prevent input of negative values
-		
+		//test.set(1.0);
 		System.out.println(sliderVal); //prints to console on driver station; debugging/testing purposes
-		printValuesOnDashboard(); //updates values on SmartDashboard
+		printValuesOnDashboard(); //updates values on SmartDashboard*/
+		printValuesOnDashboard();
 	}
 
 	/**
 	 * This function is called periodically during test mode
 	 */
 	@Override
+	
 	public void testPeriodic() {
 		LiveWindow.run();
 	}
-	
 	public void printValuesOnDashboard() {
 		//putNumber prints respective values to the SmartDashboard
 		SmartDashboard.putNumber("shooterVal", sliderVal);
-				
-		SmartDashboard.putNumber("Left Encoder: ",leftEnc.getRate()/48);
-		SmartDashboard.putNumber("Right Encoder: ", rightEnc.getRate()/48);
+		//SmartDashboard.putNumber("DB/Slider 0", 2.5);
+		//SmartDashboard.putNumber("Encoder", test.getEncVelocity());
 		//prints current drawn from all PDP ports 0-15
 		for (int i = 0; i <= 15; i++) {
 			SmartDashboard.putNumber("Port " + i + " Current", pdp.getCurrent(i));
@@ -168,6 +187,8 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("Voltage: ", pdp.getVoltage());
 		SmartDashboard.putNumber("Power: ", pdp.getTotalPower());
 		SmartDashboard.putNumber("Energy: ", pdp.getTotalEnergy());
-		SmartDashboard.putNumber("Temperature: ", pdp.getTemperature());		
+		SmartDashboard.putNumber("Temperature: ", pdp.getTemperature());
+		SmartDashboard.putBoolean("Limit Switch Voltage: ", limitSwitch.get());
+		SmartDashboard.putNumber("Talon Encoder Velocity", test.getEncVelocity());
 	}
 }

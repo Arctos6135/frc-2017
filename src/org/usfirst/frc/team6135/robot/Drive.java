@@ -1,6 +1,6 @@
 package org.usfirst.frc.team6135.robot;
 import com.kauailabs.navx.frc.AHRS;
-
+import com.ctre.CANTalon;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.I2C;
@@ -26,15 +26,15 @@ public class Drive implements PIDOutput {
 	
 	//Constants
 	private static final double kPS = 0.03;//Driving straight
-    private static final double kIS = 0.00;
-    private static final double kDS = 0.00;
-    private static final double kFS = 0.00;
+    private static final double kIS = 0.01;
+    private static final double kDS = 0.01;
+    private static final double kFS = 0.01;
 	private static final double kToleranceDegreesS = 2.0f;
     
 	private static final double kPR = 0.03;//Rotating to angle
-    private static final double kIR = 0.00;
-    private static final double kDR = 0.00;
-    private static final double kFR = 0.00;
+    private static final double kIR = 0.01;
+    private static final double kDR = 0.01;
+    private static final double kFR = 0.01;
 	private static final double kToleranceDegreesR = 2.0f;
 	
 	private static final int yAxis = 1;
@@ -51,7 +51,8 @@ public class Drive implements PIDOutput {
 	private Victor leftDrive = null;
 	private Victor rightDrive = null;
 	private AHRS ahrs = null;
-	PIDController balance = null;
+	//private CANTalon test = null;
+	public PIDController balance = null;
 	//Constructors
 	public Drive(Joystick j, int l, int r) {
 		driveStick = j;
@@ -65,31 +66,48 @@ public class Drive implements PIDOutput {
             ahrs = new AHRS(I2C.Port.kMXP); 
         } catch (RuntimeException ex ) {
             DriverStation.reportError("Error instantiating navX MXP:  " + ex.getMessage(), true);
+     
         }
 		balance = new PIDController(kPS, kIS, kDS, kFS, ahrs, this);
 		balance.setSetpoint(0.0f);
 		balance.setInputRange(-180.0f,  180.0f);
-        balance.setOutputRange(0.5, 2.0);
+        //balance.setOutputRange(0.5, 2.0);
+		balance.setOutputRange(-1, 1);
         balance.setAbsoluteTolerance(kToleranceDegreesS);
         balance.setContinuous(true);
 		balance.enable();
 	}
-	public void setRotate(double angle) {
+	public void setRotate() {
+		ahrs.reset();
 		balance.setPID(kPR, kIR, kDR, kFR);
 		balance.setAbsoluteTolerance(kToleranceDegreesR);
 		straight = false;
-		balance.setSetpoint(angle);
+        balance.setOutputRange(-1.0, 1.0);
 	}
+	//public void test() {
+	//	test.set(0.3);
+	//}
 	public void setStraight() {
+		ahrs.reset();
 		balance.setPID(kPS, kIS, kDS, kFS);
 		balance.setAbsoluteTolerance(kToleranceDegreesS);
 		straight = true;
+        balance.setOutputRange(0.5, 2.0);
 	}
 	//Direct object access methods
 	public void setMotors(double l, double r) {//sets motor speeds accounting for directions of motors
-		leftDrive.set(speed * l / scale);
-		//rightDrive.set(speed * scale * r); //COMMMENTED BY MELVIN
-		rightDrive.set(speed * r / scale );
+		if(l == r && yInput > 0) {
+			leftDrive.set(l * scale);
+			rightDrive.set(r / scale); //Dividing one speed while multiplying other to speed up slower motor while slowing down faster motor
+		}
+		else if(l == r && yInput < 0) {
+			leftDrive.set(l / scale);
+			rightDrive.set(r * scale);
+		}
+		else {
+			leftDrive.set(l * speed);
+			rightDrive.set(r * speed);
+		}
 	}
 	public void setLeft(double d) {
 		leftDrive.set(d);
@@ -161,7 +179,6 @@ public class Drive implements PIDOutput {
 	private void exactDrive() {//This method will essentially "round" the joystick inputs to purely in the x direction or purely in the y direction depending on which has greater magnitude 
 		if(Math.abs(yInput) > Math.abs(xInput)) {
 			xInput = 0;
-			ahrs.reset();
 		}
 		else {
 			yInput = 0;
@@ -176,14 +193,28 @@ public class Drive implements PIDOutput {
 			setMotors(0, 0);
 		}
 		else {
-			if(true || driveStick.getRawButton(exactDriveButton)) {
+			if(driveStick.getRawButton(exactDriveButton)) {
 				exactDrive();
 			}
-			
+			if(Math.abs(xInput) < 0.2) {
+				xInput = 0;
+				if(!balance.isEnabled()) {
+					balance.enable();
+					ahrs.reset();
+				}
+				
+			}
+			else {
+				if(balance.isEnabled()) {
+					balance.disable();
+				}
+			}
+			if(Math.abs(yInput) < 0.2) {
+				yInput = 0;
+			}
 			getValues(xInput, yInput, useSensitivityCalc, useAccelerateCalc);
 			
 			getSpeeds();
-			
 			
 			setMotors(lSpeed, rSpeed);
 		}
