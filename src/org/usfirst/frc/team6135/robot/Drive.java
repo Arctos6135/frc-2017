@@ -71,7 +71,6 @@ public class Drive implements PIDOutput {
 		balance = new PIDController(kPS, kIS, kDS, kFS, ahrs, this);
 		balance.setSetpoint(0.0f);
 		balance.setInputRange(-180.0f,  180.0f);
-        //balance.setOutputRange(0.5, 2.0);
 		balance.setOutputRange(-1, 1);
         balance.setAbsoluteTolerance(kToleranceDegreesS);
         balance.setContinuous(true);
@@ -82,7 +81,6 @@ public class Drive implements PIDOutput {
 		balance.setPID(kPR, kIR, kDR, kFR);
 		balance.setAbsoluteTolerance(kToleranceDegreesR);
 		straight = false;
-        balance.setOutputRange(-1.0, 1.0);
 	}
 	//public void test() {
 	//	test.set(0.3);
@@ -92,7 +90,6 @@ public class Drive implements PIDOutput {
 		balance.setPID(kPS, kIS, kDS, kFS);
 		balance.setAbsoluteTolerance(kToleranceDegreesS);
 		straight = true;
-        balance.setOutputRange(0.5, 2.0);
 	}
 	//Direct object access methods
 	public void setMotors(double l, double r) {//sets motor speeds accounting for directions of motors
@@ -221,12 +218,12 @@ public class Drive implements PIDOutput {
 	}
 	public void pidWrite(double output) {
 		if(straight) {
-			scale = output;
+			scale = Math.pow(2, output);
 			speed = 1.0;
 		}
 		else {
 			speed = output;
-			scale = 1.0;
+			scale = 0;
 		}
     }
 }
