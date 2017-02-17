@@ -52,11 +52,13 @@ public class AutoDrive extends PIDSubsystem {
     	straight = true;
     	this.getPIDController().setPID(kPD, kID, kDD, kFD);
     	this.getPIDController().setAbsoluteTolerance(kToleranceDegreesD);
+    	super.setOutputRange(-1, 1);
     }
     public void setRotate() {
     	straight = false;
     	this.getPIDController().setPID(kPR, kIR, kDR, kFR);
     	this.getPIDController().setAbsoluteTolerance(kToleranceDegreesR);
+    	super.setOutputRange(0.5, 2);
     }
     public void turnRight() {
     	drive.setMotors(1 * scale, -1 / scale);
@@ -78,7 +80,7 @@ public class AutoDrive extends PIDSubsystem {
 
     protected void usePIDOutput(double output) {
         if(!straight) {
-        	scale = Math.pow(2,  output);
+        	scale = output;
         }
         else {
         	speed = output;
