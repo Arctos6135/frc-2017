@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 2.8)
+execute_process(COMMAND v4l2-ctl -c exposure_auto=1)
+execute_process(COMMAND v4l2-ctl -c exposure_absolute=5)
+project( Main )
+find_package( OpenCV REQUIRED )
+include_directories (${OpenCV_INCLUDE_DIRS})
+add_executable( Main main.cpp )
+target_link_libraries( Main ${OpenCV_LIBS} )

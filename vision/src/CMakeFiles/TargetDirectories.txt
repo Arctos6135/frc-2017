@@ -1,0 +1,3 @@
+/home/ubuntu/2168_Vision_Example-master/src/CMakeFiles/edit_cache.dir
+/home/ubuntu/2168_Vision_Example-master/src/CMakeFiles/rebuild_cache.dir
+/home/ubuntu/2168_Vision_Example-master/src/CMakeFiles/Main.dir
