@@ -38,11 +38,12 @@ public class indexOff extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	Robot.indexer.setOn(false);
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.indexer.talonSet(0);
+    	Robot.indexer.set(0);
     }
 
     // Make this return true when this Command no longer needs to run execute()

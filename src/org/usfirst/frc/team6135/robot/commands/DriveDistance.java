@@ -42,6 +42,8 @@ public class DriveDistance extends Command {
     protected void end() {
     	auto.disable();
     	auto.drive.balance.disable();
+    	auto.drive.setMotors(0, 0);
+    	auto.drive.setStraight();
     }
 
     // Called when another command which requires one or more of the same

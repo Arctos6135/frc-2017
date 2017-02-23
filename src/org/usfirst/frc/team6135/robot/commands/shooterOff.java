@@ -38,11 +38,12 @@ public class shooterOff extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	Robot.shooter.setOn(false);
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.shooter.talonSet(0);
+    	Robot.shooter.set(0);
     }
 
     // Make this return true when this Command no longer needs to run execute()

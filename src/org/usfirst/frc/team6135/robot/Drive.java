@@ -9,7 +9,9 @@ import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.Victor;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Drive implements PIDOutput {
@@ -18,6 +20,7 @@ public class Drive implements PIDOutput {
 	private double lSpeed = 0.0;
 	private double xInput;
 	private double yInput;
+	private double zInput;
 	private double xFinal;
 	private double yFinal;
 	private double scale = 1.0;
@@ -26,26 +29,28 @@ public class Drive implements PIDOutput {
 	
 	//Constants
 	private static final double kPS = 0.03;//Driving straight
-    private static final double kIS = 0.01;
-    private static final double kDS = 0.01;
-    private static final double kFS = 0.01;
+    private static final double kIS = 0.00;
+    private static final double kDS = 0.00;
 	private static final double kToleranceDegreesS = 2.0f;
     
 	private static final double kPR = 0.03;//Rotating to angle
-    private static final double kIR = 0.01;
-    private static final double kDR = 0.01;
-    private static final double kFR = 0.01;
+    private static final double kIR = 0.00;
+    private static final double kDR = 0.00;
 	private static final double kToleranceDegreesR = 2.0f;
 	
 	private static final int yAxis = 1;
 	private static final int yReverse = -1;
 	private static final int xAxis = 0;
 	private static final int xReverse = 1;
+	private static final int zAxis = 2;
 
-	private static final int exactDriveButton = 2;
+	private static final int exactDriveButton = 1;
 
-	private static final boolean rReverse = false;
+	private static final boolean rReverse = true;
 	private static final boolean lReverse = false;
+	
+	private static final double WHEEL_RADIUS=6;
+	private static final double PULSECNT=48;
 	//Objects
 	private Joystick driveStick = null;
 	private Victor leftDrive = null;
@@ -63,22 +68,24 @@ public class Drive implements PIDOutput {
 		leftDrive.setInverted(lReverse);
 		rightDrive.setInverted(rReverse);
 		try {
-            ahrs = new AHRS(I2C.Port.kMXP); 
+			ahrs = new AHRS(SerialPort.Port.kUSB1);
+			SmartDashboard.putString("NAVX", "Not RIP?");
         } catch (RuntimeException ex ) {
             DriverStation.reportError("Error instantiating navX MXP:  " + ex.getMessage(), true);
-     
+            SmartDashboard.putString("NAVX", "RIP");
         }
-		balance = new PIDController(kPS, kIS, kDS, kFS, ahrs, this);
+		balance = new PIDController(kPS, kIS, kDS, ahrs, this);
 		balance.setSetpoint(0.0f);
 		balance.setInputRange(-180.0f,  180.0f);
 		balance.setOutputRange(-1, 1);
         balance.setAbsoluteTolerance(kToleranceDegreesS);
         balance.setContinuous(true);
 		balance.enable();
+		LiveWindow.addActuator("Drive", "PID", balance);
 	}
 	public void setRotate() {
 		ahrs.reset();
-		balance.setPID(kPR, kIR, kDR, kFR);
+		balance.setPID(kPR, kIR, kDR);
 		balance.setAbsoluteTolerance(kToleranceDegreesR);
 		straight = false;
 	}
@@ -87,7 +94,7 @@ public class Drive implements PIDOutput {
 	//}
 	public void setStraight() {
 		ahrs.reset();
-		balance.setPID(kPS, kIS, kDS, kFS);
+		balance.setPID(kPS, kIS, kDS);
 		balance.setAbsoluteTolerance(kToleranceDegreesS);
 		straight = true;
 	}
@@ -122,7 +129,7 @@ public class Drive implements PIDOutput {
 	       	    rSpeed = Math.max(yFinal, -xFinal);
 	       	    lSpeed = yFinal + xFinal;
 	       	}
-	   	}
+	   	} 
 		else {
 	       	if (xFinal > 0.0) {
 	       	    rSpeed = -Math.max(-yFinal, xFinal);
@@ -186,35 +193,36 @@ public class Drive implements PIDOutput {
 	public void teleopDrive() {//Implements individual driving and input methods to allow driving in teleop
 		xInput = xReverse * driveStick.getRawAxis(xAxis);
 		yInput = yReverse * driveStick.getRawAxis(yAxis);
-		if(Math.abs(xInput) < 0.1 && Math.abs(yInput) < 0.1) {
-			setMotors(0, 0);
+		zInput = driveStick.getRawAxis(zAxis);
+		if(driveStick.getRawButton(exactDriveButton)) {
+			exactDrive();
+		}
+		if(Math.abs(xInput) < 0.2) {
+			xInput = 0;
+			if(!balance.isEnabled()) {
+				//balance.enable();
+				ahrs.reset();
+			}
 		}
 		else {
-			if(driveStick.getRawButton(exactDriveButton)) {
-				exactDrive();
+			if(balance.isEnabled()) {
+				balance.disable();
 			}
-			if(Math.abs(xInput) < 0.2) {
-				xInput = 0;
-				if(!balance.isEnabled()) {
-					balance.enable();
-					ahrs.reset();
-				}
-				
+		}
+		if(Math.abs(yInput) < 0.2) {
+			yInput = 0;
+			if(Math.abs(zInput) < 0.2) {
+				zInput = 0;
 			}
 			else {
-				if(balance.isEnabled()) {
-					balance.disable();
-				}
+				xInput = zInput;
 			}
-			if(Math.abs(yInput) < 0.2) {
-				yInput = 0;
-			}
-			getValues(xInput, yInput, useSensitivityCalc, useAccelerateCalc);
-			
-			getSpeeds();
-			
-			setMotors(lSpeed, rSpeed);
 		}
+		getValues(xInput, yInput, useSensitivityCalc, useAccelerateCalc);
+			
+		getSpeeds();
+			
+		setMotors(lSpeed, rSpeed);
 	}
 	public void pidWrite(double output) {
 		if(straight) {
@@ -223,7 +231,23 @@ public class Drive implements PIDOutput {
 		}
 		else {
 			speed = output;
-			scale = 0;
+			scale = 1.0;
 		}
     }
+	public void reverse() {
+		leftDrive.setInverted(!leftDrive.getInverted());
+		rightDrive.setInverted(!rightDrive.getInverted());
+		Victor temp1 = leftDrive;
+		Victor temp2 = rightDrive;
+		rightDrive = temp1;
+		leftDrive = temp2;
+	}
+	//added accessMethod
+	public void printValues() {
+		SmartDashboard.putNumber("Yaw", ahrs.getYaw());
+		SmartDashboard.putNumber("Angle", ahrs.getAngle());
+		SmartDashboard.putNumber("Scale", scale);
+		SmartDashboard.putBoolean("PID", balance.isEnabled());
+		SmartDashboard.putNumber("Compass", ahrs.getCompassHeading());
+	}
 }

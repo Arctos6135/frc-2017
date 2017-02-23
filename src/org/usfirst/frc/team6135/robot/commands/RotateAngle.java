@@ -19,22 +19,30 @@ public class RotateAngle extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	auto.enable();
-    	auto.setRotate();
-    	auto.setSetpoint(0);
     	auto.drive.balance.enable();
     	auto.drive.setRotate();
     	auto.drive.balance.setSetpoint(angle);
-    }
-
-    // Called repeatedly when this Command is scheduled to run
-    protected void execute() {
-    	if(angle > 0) {
+    	auto.turn();
+    	/*if(angle > 0) {
     		auto.turnRight();
     	}
     	else {
     		auto.turnLeft();
+    	}*/
+    	auto.enable();
+    	auto.setRotate();
+    	auto.setSetpoint(1);
+    }
+
+    // Called repeatedly when this Command is scheduled to run
+    protected void execute() {
+    	/*if(angle > 0) {
+    		auto.turnRight();
     	}
+    	else {
+    		auto.turnLeft();
+    	}*/
+    	auto.turn();
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -46,6 +54,8 @@ public class RotateAngle extends Command {
     protected void end() {
     	auto.disable();
     	auto.drive.balance.disable();
+    	auto.drive.setMotors(0, 0);
+    	auto.drive.setStraight();
     }
 
     // Called when another command which requires one or more of the same

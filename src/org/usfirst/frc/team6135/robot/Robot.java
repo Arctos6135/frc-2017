@@ -1,9 +1,10 @@
-
 package org.usfirst.frc.team6135.robot;
 import com.ctre.CANTalon;
 import com.ctre.CANTalon.FeedbackDevice;
 
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
@@ -13,6 +14,7 @@ import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.livewindow.LiveWindowSendable;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -22,7 +24,6 @@ import org.usfirst.frc.team6135.robot.subsystems.ExampleSubsystem;
 import org.usfirst.frc.team6135.robot.subsystems.Indexer;
 import org.usfirst.frc.team6135.robot.subsystems.Intake;
 import org.usfirst.frc.team6135.robot.subsystems.Shooter;
-
 
 
 /**
@@ -39,14 +40,15 @@ public class Robot extends IterativeRobot {
     public static Intake intake;
     public static Indexer indexer;
     public static Climber climber;
-    public static JetsonComm jetson;
-    Joystick j=OI.j;
-	Drive drive = new Drive(j, RobotMap.lVicPort, RobotMap.rVicPort);
-	AutoDrive auto = new AutoDrive(0, 1, 2, 3, drive);
+    //public static JetsonComm jetson;
+    public Joystick j;
+	public static Drive drive;
+	public static AutoDrive auto;
 	Command autonomousCommand;
-	SendableChooser<Command> chooser = new SendableChooser<Command>();
-	PowerDistributionPanel pdp = new PowerDistributionPanel();
-	DigitalInput limitSwitch = new DigitalInput(9);
+	SendableChooser<Command> chooser;
+	public static PowerDistributionPanel pdp;
+	CameraServer server = null;
+	DigitalOutput photoSensor = null;
 	int counter;
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -55,7 +57,25 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void robotInit() {
+		server = CameraServer.getInstance();
+		server.startAutomaticCapture();
+		//server.startAutomaticCapture().setResolution(1920, 1080);
+		server.getVideo();
+		
+		RobotMap.init();
+		shooter=new Shooter();
+		indexer= new Indexer();
+		intake = new Intake();
+		climber = new Climber();
+		drive=new Drive(OI.j, RobotMap.lVicPort, RobotMap.rVicPort);
+		//drive.reverse();
+		auto = new AutoDrive(RobotMap.lEnc1, RobotMap.lEnc2, RobotMap.rEnc1, RobotMap.rEnc2, drive);
+		//auto.reverse();
 		oi = new OI();
+		j=OI.j;
+		chooser=  new SendableChooser<Command>();
+		pdp = new PowerDistributionPanel();
+		photoSensor = new DigitalOutput(RobotMap.photoElectricSensor);
 		//chooser.addDefault("Default Auto", new ExampleCommand());
 		//chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", chooser);
@@ -146,19 +166,6 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void teleopInit() {
-		// This makes sure that the autonomous stops running when
-		// teleop starts running. If you want the autonomous to
-		//
-		// if Robotgoeshungry{
-		// 			eAtRobot voiceout<<"AAAAAAAAAAAAAAAAAAAAAAAA"<<endl;
-		//	}
-		//	if else{
-		//				eAtElin voiceout<<"ARRRRRRRRGH"<<endl;
-		//	}
-		//return "zero";
-		//
-		// continue until interrupted by another command, remove
-		// this line or comment it out.
 		drive.setStraight();
 		if(!drive.balance.isEnabled()) {
 			drive.balance.enable();
@@ -171,7 +178,6 @@ public class Robot extends IterativeRobot {
 
 	/**
 	 * This function is called periodically during operator control
-	 * AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 	 */
 	@Override
 	public void teleopPeriodic() {
@@ -196,27 +202,23 @@ public class Robot extends IterativeRobot {
 		LiveWindow.run();
 	}
 	public void printValuesOnDashboard() {
-		//putNumber prints respective values to the SmartDashboard
-		//SmartDashboard.putNumber("shooterVal", sliderVal);
-		//SmartDashboard.putNumber("DB/Slider 0", 2.5);
-		//SmartDashboard.putNumber("Encoder", test.getEncVelocity());
-		//prints current drawn from all PDP ports 0-15
-		for (int i = 0; i <= 15; i++) {
-			SmartDashboard.putNumber("Port " + i + " Current", pdp.getCurrent(i));
-		}
-		
-		SmartDashboard.putNumber("Current: ", pdp.getTotalCurrent());
+		SmartDashboard.putNumber("Current: ", pdp.getTotalCurrent() - pdp.getCurrent(15));
 		SmartDashboard.putNumber("Voltage: ", pdp.getVoltage());
 		SmartDashboard.putNumber("Power: ", pdp.getTotalPower());
 		SmartDashboard.putNumber("Energy: ", pdp.getTotalEnergy());
 		SmartDashboard.putNumber("Temperature: ", pdp.getTemperature());
-		SmartDashboard.putBoolean("Limit Switch Voltage: ", limitSwitch.get());
+		SmartDashboard.putNumber("Right Encoder", auto.getRateR());
+		SmartDashboard.putNumber("Left Encoder", auto.getRateL());
+		SmartDashboard.putBoolean("PhotoSensor", photoSensor.get());
+		drive.printValues();
+		auto.printValues();
+		climber.printToSmartDashboard();
+		indexer.printToSmartDashboard();
+		intake.printToSmartDashboard();
+		shooter.printToSmartDashboard();
+		
+		//SmartDashboard.putBoolean("Limit Switch Voltage: ", limitSwitch.get());
 		//SmartDashboard.putNumber("Talon Encoder Velocity", test.getEncVelocity());
 	}
 }
 
-
-
-
-	/* cout<<"Kenny is EXTRA"<<endl;
-	 */

@@ -17,16 +17,17 @@ public class climberOn extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	Robot.climber.setTalon(0);
+    	Robot.climber.setOn(true);
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.climber.setTalon(1.0);
+    	Robot.climber.set(-1.0);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
+    	Robot.climber.setOn(false);
         return false;
     }
 
