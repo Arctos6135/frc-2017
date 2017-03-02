@@ -1,17 +1,30 @@
-
 package org.usfirst.frc.team6135.robot;
+import com.ctre.CANTalon;
+import com.ctre.CANTalon.FeedbackDevice;
 
+import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.livewindow.LiveWindowSendable;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import org.usfirst.frc.team6135.robot.commands.ExampleCommand;
+import org.usfirst.frc.team6135.robot.subsystems.AutoDrive;
+import org.usfirst.frc.team6135.robot.subsystems.Climber;
 import org.usfirst.frc.team6135.robot.subsystems.ExampleSubsystem;
+import org.usfirst.frc.team6135.robot.subsystems.Indexer;
+import org.usfirst.frc.team6135.robot.subsystems.Intake;
+import org.usfirst.frc.team6135.robot.subsystems.Shooter;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -22,30 +35,55 @@ import org.usfirst.frc.team6135.robot.subsystems.ExampleSubsystem;
  */
 public class Robot extends IterativeRobot {
 
-	public static final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
 	public static OI oi;
-	Encoder leftEnc=new Encoder(0,1,true,Encoder.EncodingType.k2X);
-	Encoder rightEnc=new Encoder(2,3,false,Encoder.EncodingType.k2X);
-	Victor leftDrive=new Victor(0);
-	Victor rightDrive=new Victor(1);
+	public static Shooter shooter;
+    public static Intake intake;
+    public static Indexer indexer;
+    public static Climber climber;
+    //public static JetsonComm jetson;
+    public Joystick j;
+	public static Drive drive;
+	public static AutoDrive auto;
 	Command autonomousCommand;
-	SendableChooser<Command> chooser = new SendableChooser<>();
-
+	SendableChooser<Command> chooser;
+	public static PowerDistributionPanel pdp;
+	CameraServer server = null;
+	DigitalOutput photoSensor = null;
+	int counter;
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
 	 */
+	
 	@Override
 	public void robotInit() {
+		server = CameraServer.getInstance();
+		server.startAutomaticCapture();
+		//server.startAutomaticCapture().setResolution(1920, 1080);
+		server.getVideo();
+		
+		RobotMap.init();
+		shooter=new Shooter();
+		indexer= new Indexer();
+		intake = new Intake();
+		climber = new Climber();
+		drive=new Drive(OI.j, RobotMap.lVicPort, RobotMap.rVicPort);
+		//drive.reverse();
+		auto = new AutoDrive(RobotMap.lEnc1, RobotMap.lEnc2, RobotMap.rEnc1, RobotMap.rEnc2, drive);
+		//auto.reverse();
 		oi = new OI();
-		chooser.addDefault("Default Auto", new ExampleCommand());
-		// chooser.addObject("My Auto", new MyAutoCommand());
+		j=OI.j;
+		chooser=  new SendableChooser<Command>();
+		pdp = new PowerDistributionPanel();
+		photoSensor = new DigitalOutput(RobotMap.photoElectricSensor);
+		//chooser.addDefault("Default Auto", new ExampleCommand());
+		//chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", chooser);
 	}
 
 	/**
 	 * This function is called once each time the robot enters Disabled mode.
-	 * You can use it to reset any subsystem information you want to clear when
+	 * You use it to reset any subsystem information you want to clear when
 	 * the robot is disabled.
 	 */
 	@Override
@@ -71,8 +109,11 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		autonomousCommand = chooser.getSelected();
-
+		//autonomusCommand = chooser.getSelected();
+		if(drive.balance.isEnabled()) {
+			drive.balance.disable();
+		}
+		auto.disable();
 		/*
 		 * String autoSelected = SmartDashboard.getString("Auto Selector",
 		 * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
@@ -81,8 +122,8 @@ public class Robot extends IterativeRobot {
 		 */
 
 		// schedule the autonomous command (example)
-		if (autonomousCommand != null)
-			autonomousCommand.start();
+		//if (autonomousCommand != null)
+		//	autonomousCommand.start();
 	}
 
 	/**
@@ -91,14 +132,46 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
+		/*switch (mode) {
+		//	case 1:
+				counter = 0; //will ++ per method loop iteration; per packet sent; per ~20ms
+				if(counter < 100) { //~2s
+					drive.setMotors(1.0,1.0); //both forward
+				}
+				else if (counter<200) { //~4s
+					drive.setMotors(1.0, 0.0); //left fwd
+				}
+				else if(counter<300) { //~6s
+					drive.setMotors(0.0, 1.0); //right fwd
+				}
+				else {
+					drive.setMotors(0.0, 0.0); //stop
+				}
+				counter++;
+				
+		/*		break;
+			case 2:
+				counter = 0;
+				if (counter < 500)
+					drive.setMotors(-1.0, -1.0);
+				else
+					drive.setMotors(0.0, 0.0);
+				counter++;
+				
+				break;
+		}
+		*/
+		printValuesOnDashboard(); //updates values on SmartDashboard
 	}
 
 	@Override
 	public void teleopInit() {
-		// This makes sure that the autonomous stops running when
-		// teleop starts running. If you want the autonomous to
-		// continue until interrupted by another command, remove
-		// this line or comment it out.
+		drive.setStraight();
+		if(!drive.balance.isEnabled()) {
+			drive.balance.enable();
+		}
+		auto.disable();
+		//test.setFeedbackDevice(FeedbackDevice.QuadEncoder);
 		if (autonomousCommand != null)
 			autonomousCommand.cancel();
 	}
@@ -108,18 +181,44 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		Scheduler.getInstance().run();
-		leftDrive.set(0.3);
-		rightDrive.set(-0.3);
-		System.out.println(leftEnc.getRate());
-		System.out.println(rightEnc.getRate());
+		Scheduler.getInstance().run(); //scheduler singleton instance currently empty; used for command-based
+		drive.teleopDrive(); //refer to Drive.java teleopDrive method
+		/*drive.setMotors(-0.5, 0.5); //placeholder, teleop instructions will be put here
+		drive.setStraight();
+		sliderVal = j.getRawAxis(3); //gets value from slider
+		shooterMoter.set(Math.max(0.0,sliderVal)); //Math.max to prevent input of negative values
+		//test.set(1.0);
+		System.out.println(sliderVal); //prints to console on driver station; debugging/testing purposes
+		printValuesOnDashboard(); //updates values on SmartDashboard*/
+		printValuesOnDashboard();
 	}
 
 	/**
 	 * This function is called periodically during test mode
 	 */
 	@Override
+	
 	public void testPeriodic() {
 		LiveWindow.run();
 	}
+	public void printValuesOnDashboard() {
+		SmartDashboard.putNumber("Current: ", pdp.getTotalCurrent() - pdp.getCurrent(15));
+		SmartDashboard.putNumber("Voltage: ", pdp.getVoltage());
+		SmartDashboard.putNumber("Power: ", pdp.getTotalPower());
+		SmartDashboard.putNumber("Energy: ", pdp.getTotalEnergy());
+		SmartDashboard.putNumber("Temperature: ", pdp.getTemperature());
+		SmartDashboard.putNumber("Right Encoder", auto.getRateR());
+		SmartDashboard.putNumber("Left Encoder", auto.getRateL());
+		SmartDashboard.putBoolean("PhotoSensor", photoSensor.get());
+		drive.printValues();
+		auto.printValues();
+		climber.printToSmartDashboard();
+		indexer.printToSmartDashboard();
+		intake.printToSmartDashboard();
+		shooter.printToSmartDashboard();
+		
+		//SmartDashboard.putBoolean("Limit Switch Voltage: ", limitSwitch.get());
+		//SmartDashboard.putNumber("Talon Encoder Velocity", test.getEncVelocity());
+	}
 }
+
