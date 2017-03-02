@@ -1,0 +1,36 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/ubuntu/2168_Vision_Example-master/src/edu_wpi_first_wpilibj_networktables_NetworkTablesJNI_LoggerFunction.h
+jni.h
+-
+
+/home/ubuntu/2168_Vision_Example-master/src/main.cpp
+stdio.h
+-
+stdlib.h
+-
+edu_wpi_first_wpilibj_networktables_NetworkTablesJNI_LoggerFunction.h
+/home/ubuntu/2168_Vision_Example-master/src/edu_wpi_first_wpilibj_networktables_NetworkTablesJNI_LoggerFunction.h
+opencv2/opencv.hpp
+-
+string
+-
+ctime
+-
+iostream
+-
+iomanip
+-
+sstream
+-
+unistd.h
+-
+pthread.h
+-
+
