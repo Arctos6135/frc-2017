@@ -1,0 +1,183 @@
+<xml version="1.0">
+<dashboard>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.Label">
+		<location x="321" y="508"/>
+		<property name="Text" value="----------------------------------------------------------------------------------------------------"/>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.Label">
+		<location x="321" y="379"/>
+		<property name="Text" value="----------------------------------------------------------------------------------------------------"/>
+	</static-widget>
+	<widget field="IntakeOn" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
+		<location x="456" y="157"/>
+		<width>172</width>
+	</widget>
+	<widget field="Compass" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="454"/>
+	</widget>
+	<widget field="The front side of the robot is: " type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="1112" y="3"/>
+	</widget>
+	<widget field="Drive Distance" type="Command" class="edu.wpi.first.smartdashboard.gui.elements.Command">
+		<location x="0" y="420"/>
+	</widget>
+	<widget field="Climber Warning" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="445" y="466"/>
+	</widget>
+	<widget field="Shooter Warning" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="1023" y="251"/>
+	</widget>
+	<widget field="Indexer Warning" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="744" y="320"/>
+	</widget>
+	<widget field="Rotate" type="Command" class="edu.wpi.first.smartdashboard.gui.elements.Command">
+		<location x="0" y="84"/>
+	</widget>
+	<widget field="Intake Warning" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="469" y="133"/>
+	</widget>
+	<widget field="IndexerOn" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
+		<location x="731" y="143"/>
+		<width>170</width>
+		<height>82</height>
+	</widget>
+	<widget field="Shooter" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="42"/>
+	</widget>
+	<widget field="Intake Current reading" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
+		<location x="387" y="178"/>
+		<width>268</width>
+		<height>191</height>
+	</widget>
+	<widget field="Intake RPM" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
+		<location x="444" y="87"/>
+		<width>184</width>
+		<height>46</height>
+	</widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.Label">
+		<location x="493" y="395"/>
+		<height>33</height>
+		<property name="Text" value="Climber Subsystem"/>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.Label">
+		<location x="1058" y="54"/>
+		<property name="Text" value="Shooter Subsystem"/>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.Label">
+		<location x="777" y="60"/>
+		<property name="Text" value="Indexer Subsystem"/>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.Label">
+		<location x="433" y="12"/>
+		<width>228</width>
+		<height>113</height>
+		<property name="Text" value="Intake Subsystem"/>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.CameraServerViewer">
+		<location x="1184" y="531"/>
+		<height>118</height>
+		<property name="Camera Choice" value=""/>
+	</static-widget>
+	<widget field="Autonomous Command" type="Command" class="edu.wpi.first.smartdashboard.gui.elements.Command">
+		<location x="-12" y="345"/>
+	</widget>
+	<widget field="Auto mode" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
+		<location x="194" y="588"/>
+	</widget>
+	<widget field="Current reading for Victor" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="698" y="277"/>
+	</widget>
+	<widget field="Voltage: " type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="-10" y="265"/>
+		<height>53</height>
+	</widget>
+	<widget field="Angle" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="-31" y="227"/>
+	</widget>
+	<widget field="Current: " type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="-7" y="442"/>
+	</widget>
+	<widget field="NAVX" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="11" y="326"/>
+	</widget>
+	<widget field="Scale" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="6" y="70"/>
+	</widget>
+	<widget field="Yaw" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="35" y="193"/>
+	</widget>
+	<widget field="PhotoSensor" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="651"/>
+	</widget>
+	<widget field="Temperature: " type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="609"/>
+	</widget>
+	<widget field="Energy: " type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="588"/>
+	</widget>
+	<widget field="Current reading for Talon" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="695" y="226"/>
+		<width>211</width>
+		<height>50</height>
+	</widget>
+	<widget field="LEnc" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="546"/>
+	</widget>
+	<widget field="PID" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="525"/>
+	</widget>
+	<widget field="Right Encoder" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="483"/>
+	</widget>
+	<widget field="Shooter RPM" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="977" y="193"/>
+		<width>214</width>
+		<height>55</height>
+	</widget>
+	<widget field="Power: " type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="399"/>
+	</widget>
+	<widget field="Indexer RPM" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="722" y="77"/>
+		<width>177</width>
+		<height>66</height>
+	</widget>
+	<widget field="Total current" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="760" y="298"/>
+	</widget>
+	<widget field="ClimberOn" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="471" y="426"/>
+	</widget>
+	<widget field="Left Encoder" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="157"/>
+	</widget>
+	<widget field="REnc" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="126"/>
+	</widget>
+	<widget field="ShooterOn" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="986" y="134"/>
+		<width>202</width>
+		<height>58</height>
+	</widget>
+	<widget field="Shooter Current reading" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="983" y="69"/>
+		<height>65</height>
+	</widget>
+	<widget field="Climber Current reading" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="407" y="446"/>
+	</widget>
+	<widget field="Current reading" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="21"/>
+	</widget>
+</dashboard>
+<live-window>
+</live-window>
+	<hidden field="indexWithSpeed"/>
+	<hidden field="shootWithSpeed"/>
+	<hidden field="shooterOff"/>
+	<hidden field="climberOn"/>
+	<hidden field="indexOff"/>
+	<hidden field="intakeOff"/>
+	<hidden field="shootWithIndex"/>
+	<hidden field="intakeOn"/>
+</xml>
