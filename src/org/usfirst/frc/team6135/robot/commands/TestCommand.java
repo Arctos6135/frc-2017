@@ -1,26 +1,23 @@
 package org.usfirst.frc.team6135.robot.commands;
 
-import org.usfirst.frc.team6135.robot.Robot;
-
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
  *
  */
-public class shooterOff extends Command {
+public class TestCommand extends Command {
 
-    public shooterOff() {
-        requires(Robot.shooter);
+    public TestCommand(Subsystem O) {
+        requires(O);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	Robot.shooter.setOn(false);
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.shooter.set(0);
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -30,7 +27,6 @@ public class shooterOff extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
-    	Robot.shooter.setOn(false);
     }
 
     // Called when another command which requires one or more of the same

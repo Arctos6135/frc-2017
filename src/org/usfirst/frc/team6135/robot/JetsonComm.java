@@ -8,6 +8,7 @@ public class JetsonComm {
 			private ITableListener t;
 			private double dis;
 			private double straightDis;
+			private double targetRPM;
 			public JetsonComm()
 			{
 				nt=NetworkTable.getTable("SmartDashboard");
@@ -25,5 +26,9 @@ public class JetsonComm {
 			public double getStraightDis()
 			{
 				return straightDis;
+			}
+			public double gettargetRPM()
+			{
+				return targetRPM;
 			}
 }

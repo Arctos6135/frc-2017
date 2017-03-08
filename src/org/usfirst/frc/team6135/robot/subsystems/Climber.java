@@ -19,6 +19,7 @@ public class Climber extends Subsystem {
 	private final CANTalon talon = RobotMap.climberTalon;
 	private boolean ifOn=false;
 	private boolean ifWarning;
+	private double current=0;
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
         //setDefaultCommand(new MySpecialCommand());
@@ -34,10 +35,15 @@ public class Climber extends Subsystem {
     }
     public void printToSmartDashboard()
     {
-    	SmartDashboard.putNumber("Climber Current reading", Robot.pdp.getCurrent(12));
+    	current=Robot.pdp.getCurrent(12);
+    	SmartDashboard.putNumber("Climber Current reading", current);
     	ifWarning=Robot.pdp.getCurrent(12)>30;
     	SmartDashboard.putBoolean("Climber Warning", ifWarning);
     	SmartDashboard.putBoolean("ClimberOn", ifOn);
+    }
+    public double getCurrent()
+    {
+    	return this.current;
     }
 }
 
