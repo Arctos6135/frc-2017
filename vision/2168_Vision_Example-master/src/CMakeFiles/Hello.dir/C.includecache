@@ -1,0 +1,14 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/ubuntu/2168_Vision_Example-master/src/Hello.c
+stdio.h
+-
+NetworkTable.h
+/home/ubuntu/2168_Vision_Example-master/src/NetworkTable.h
+
