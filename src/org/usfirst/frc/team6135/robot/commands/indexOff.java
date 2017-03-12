@@ -15,7 +15,8 @@ import org.usfirst.frc.team6135.robot.Robot;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
- *
+ *This command will completely turn off the indexer
+ *Creator: Carl Yu
  */
 public class indexOff extends Command {
 

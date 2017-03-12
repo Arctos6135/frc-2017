@@ -8,7 +8,9 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
- *
+ * This command will start the shooter (DEBUG CLASS)
+ * Activated by: SmartDashboard
+ * Creater: Carl Yu
  */
 public class AutoDrive extends PIDSubsystem {
 	//Constants

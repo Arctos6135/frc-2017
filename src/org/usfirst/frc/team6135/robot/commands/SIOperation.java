@@ -5,7 +5,8 @@ import org.usfirst.frc.team6135.robot.Robot;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
 /**
- *
+ *This command will run both shooter and indexer at the same time
+ * Creater: Carl Yu
  */
 public class SIOperation extends CommandGroup {
 

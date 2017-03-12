@@ -5,7 +5,9 @@ import org.usfirst.frc.team6135.robot.Robot;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
- *
+ * This command will start the climber
+ * Activated by: Operator Joystick, toggled
+ * Creater: Carl Yu
  */
 public class climberOperation extends Command {
 

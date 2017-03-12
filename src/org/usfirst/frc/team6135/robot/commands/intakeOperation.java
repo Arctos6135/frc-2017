@@ -5,7 +5,9 @@ import org.usfirst.frc.team6135.robot.Robot;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
- *
+ * This command will start the intake
+ * Activated by: Operator Joystick, toggled
+ * Creater: Carl Yu
  */
 public class intakeOperation extends Command {
 

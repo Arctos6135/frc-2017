@@ -16,7 +16,9 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
- *
+ * This command will start the shooter
+ * Activated by: Operator Joystick, toggled
+ * Creater: Carl Yu
  */
 public class shooterOperation extends Command {
 	public double targetRPM;

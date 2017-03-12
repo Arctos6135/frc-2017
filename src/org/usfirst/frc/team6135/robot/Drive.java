@@ -13,7 +13,10 @@ import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
+/**
+ This class handles the driving mechanism of the robot. It uses navX to adjust its position
+ Creater: Adrian Carpenter 
+ */
 public class Drive implements PIDOutput {
 	//Variables used
 	private double rSpeed = 0.0;

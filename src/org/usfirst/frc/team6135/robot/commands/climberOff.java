@@ -5,7 +5,9 @@ import org.usfirst.frc.team6135.robot.Robot;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
- *
+ * This command will stop the climber completely
+ * Activated by: Driver Joystick, pressed
+ * Creater: Carl Yu
  */
 public class climberOff extends Command {
 
