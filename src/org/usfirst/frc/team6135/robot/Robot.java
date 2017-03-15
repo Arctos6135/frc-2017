@@ -1,26 +1,19 @@
 package org.usfirst.frc.team6135.robot;
-import com.ctre.CANTalon;
-import com.ctre.CANTalon.FeedbackDevice;
+
 
 import edu.wpi.first.wpilibj.CameraServer;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DigitalOutput;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
-import edu.wpi.first.wpilibj.Spark;
-import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import edu.wpi.first.wpilibj.livewindow.LiveWindowSendable;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team6135.robot.subsystems.AutoDrive;
 import org.usfirst.frc.team6135.robot.subsystems.Climber;
-import org.usfirst.frc.team6135.robot.subsystems.ExampleSubsystem;
 import org.usfirst.frc.team6135.robot.subsystems.Indexer;
 import org.usfirst.frc.team6135.robot.subsystems.Intake;
 import org.usfirst.frc.team6135.robot.subsystems.Shooter;
