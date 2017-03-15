@@ -1,6 +1,5 @@
 package org.usfirst.frc.team6135.robot.commands.debug;
 
-import org.usfirst.frc.team6135.robot.Robot;
 import org.usfirst.frc.team6135.robot.commands.Reverse;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;

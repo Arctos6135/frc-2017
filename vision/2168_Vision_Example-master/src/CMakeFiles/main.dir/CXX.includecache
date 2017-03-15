@@ -6,17 +6,11 @@
 
 #IncludeRegexTransform: 
 
-/home/ubuntu/2168_Vision_Example-master/src/edu_wpi_first_wpilibj_networktables_NetworkTablesJNI_LoggerFunction.h
-jni.h
--
-
 /home/ubuntu/2168_Vision_Example-master/src/main.cpp
 stdio.h
 -
 stdlib.h
 -
-edu_wpi_first_wpilibj_networktables_NetworkTablesJNI_LoggerFunction.h
-/home/ubuntu/2168_Vision_Example-master/src/edu_wpi_first_wpilibj_networktables_NetworkTablesJNI_LoggerFunction.h
 opencv2/opencv.hpp
 -
 string
@@ -33,4 +27,6 @@ unistd.h
 -
 pthread.h
 -
+NetworkTable.h
+/home/ubuntu/2168_Vision_Example-master/src/NetworkTable.h
 

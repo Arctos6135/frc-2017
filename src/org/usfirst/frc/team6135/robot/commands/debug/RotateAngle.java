@@ -1,7 +1,6 @@
 package org.usfirst.frc.team6135.robot.commands.debug;
 
 import edu.wpi.first.wpilibj.command.Command;
-import org.usfirst.frc.team6135.robot.Robot;
 import org.usfirst.frc.team6135.robot.subsystems.AutoDrive;
 /**
  *This command will rotate robot to a set degree
