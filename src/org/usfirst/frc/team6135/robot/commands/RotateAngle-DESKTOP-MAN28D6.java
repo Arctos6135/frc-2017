@@ -1,42 +1,52 @@
-package org.usfirst.frc.team6135.robot.commands.debug;
-
-import org.usfirst.frc.team6135.robot.subsystems.AutoDrive;
+package org.usfirst.frc.team6135.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-
+import org.usfirst.frc.team6135.robot.subsystems.AutoDrive;
 /**
- This command drives the robot straight for a set distance
- Creater: Adrian Carpenter
+ *
  */
-public class DriveDistance extends Command {
+public class RotateAngle extends Command {
+	private double angle;
 	private AutoDrive auto;
-	private double dist;
-    public DriveDistance(AutoDrive a, double d) {
+    public RotateAngle(AutoDrive a, double theta) {
     	requires(a);
+    	angle = theta;
     	auto = a;
-    	dist = d;
-        // Use requires() here to declare subsystem dependencies
+    	// Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	auto.enable();
-    	auto.setStraight();
-    	auto.setSetpoint(dist);
     	auto.drive.balance.enable();
-    	auto.drive.setStraight();
-    	auto.drive.balance.setSetpoint(0);
+    	auto.drive.setRotate();
+    	auto.drive.balance.setSetpoint(angle);
+    	auto.turn();
+    	/*if(angle > 0) {
+    		auto.turnRight();
+    	}
+    	else {
+    		auto.turnLeft();
+    	}*/
+    	auto.enable();
+    	auto.setRotate();
+    	auto.setSetpoint(1);
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	auto.move();
+    	/*if(angle > 0) {
+    		auto.turnRight();
+    	}
+    	else {
+    		auto.turnLeft();
+    	}*/
+    	auto.turn();
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return auto.onTarget();
+        return auto.drive.balance.onTarget();
     }
 
     // Called once after isFinished returns true
