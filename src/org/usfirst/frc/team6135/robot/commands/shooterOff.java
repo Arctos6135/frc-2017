@@ -5,9 +5,13 @@ import org.usfirst.frc.team6135.robot.Robot;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
+<<<<<<< HEAD
  * This command will stop the shooter completely
  * Activated by: Driver Joystick, pressed
  * Creater: Carl Yu
+=======
+ *
+>>>>>>> parent of c6097e1... Added Comments Debug
  */
 public class shooterOff extends Command {
 

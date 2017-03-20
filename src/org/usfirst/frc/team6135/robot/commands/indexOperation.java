@@ -15,9 +15,13 @@ import org.usfirst.frc.team6135.robot.Robot;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
+<<<<<<< HEAD
  * This command will start the indexer
  * Activated by: Command SIOperation
  * Creater: Carl Yu
+=======
+ *
+>>>>>>> parent of c6097e1... Added Comments Debug
  */
 public class indexOperation extends Command {
 
