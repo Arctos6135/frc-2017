@@ -6,8 +6,12 @@ import edu.wpi.first.wpilibj.command.Command;
 
 /**
 <<<<<<< HEAD
+<<<<<<< HEAD
  *This command will reverse the control of the robot
  *Creator: Adrian Carpenter
+=======
+ *
+>>>>>>> parent of c6097e1... Added Comments Debug
 =======
  *
 >>>>>>> parent of c6097e1... Added Comments Debug

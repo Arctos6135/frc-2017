@@ -9,9 +9,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
 <<<<<<< HEAD
+<<<<<<< HEAD
  * This command will start the shooter (DEBUG CLASS)
  * Activated by: SmartDashboard
  * Creater: Carl Yu
+=======
+ *
+>>>>>>> parent of c6097e1... Added Comments Debug
 =======
  *
 >>>>>>> parent of c6097e1... Added Comments Debug

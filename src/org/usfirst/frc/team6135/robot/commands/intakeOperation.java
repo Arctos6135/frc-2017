@@ -6,9 +6,13 @@ import edu.wpi.first.wpilibj.command.Command;
 
 /**
 <<<<<<< HEAD
+<<<<<<< HEAD
  * This command will start the intake
  * Activated by: Operator Joystick, toggled
  * Creater: Carl Yu
+=======
+ *
+>>>>>>> parent of c6097e1... Added Comments Debug
 =======
  *
 >>>>>>> parent of c6097e1... Added Comments Debug
