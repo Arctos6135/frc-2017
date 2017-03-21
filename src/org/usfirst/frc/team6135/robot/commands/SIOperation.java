@@ -6,12 +6,8 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 
 /**
 <<<<<<< HEAD
-<<<<<<< HEAD
  *This command will run both shooter and indexer at the same time
  * Creater: Carl Yu
-=======
- *
->>>>>>> parent of c6097e1... Added Comments Debug
 =======
  *
 >>>>>>> parent of c6097e1... Added Comments Debug

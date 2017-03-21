@@ -16,13 +16,9 @@ import edu.wpi.first.wpilibj.command.Command;
 
 /**
 <<<<<<< HEAD
-<<<<<<< HEAD
  * This command will start the indexer
  * Activated by: Command SIOperation
  * Creater: Carl Yu
-=======
- *
->>>>>>> parent of c6097e1... Added Comments Debug
 =======
  *
 >>>>>>> parent of c6097e1... Added Comments Debug
