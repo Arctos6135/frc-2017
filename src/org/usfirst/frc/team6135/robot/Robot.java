@@ -1,8 +1,4 @@
 package org.usfirst.frc.team6135.robot;
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -11,9 +7,6 @@ import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-=======
-=======
->>>>>>> parent of c6097e1... Added Comments Debug
 import com.ctre.CANTalon;
 import com.ctre.CANTalon.FeedbackDevice;
 
@@ -30,23 +23,16 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.livewindow.LiveWindowSendable;
-<<<<<<< HEAD
->>>>>>> parent of c6097e1... Added Comments Debug
-=======
->>>>>>> parent of c6097e1... Added Comments Debug
+
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team6135.robot.subsystems.AutoDrive;
 import org.usfirst.frc.team6135.robot.subsystems.Climber;
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 import org.usfirst.frc.team6135.robot.subsystems.ExampleSubsystem;
->>>>>>> parent of c6097e1... Added Comments Debug
-=======
+
 import org.usfirst.frc.team6135.robot.subsystems.ExampleSubsystem;
->>>>>>> parent of c6097e1... Added Comments Debug
+
 import org.usfirst.frc.team6135.robot.subsystems.Indexer;
 import org.usfirst.frc.team6135.robot.subsystems.Intake;
 import org.usfirst.frc.team6135.robot.subsystems.Shooter;

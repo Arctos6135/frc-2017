@@ -1,14 +1,9 @@
 package org.usfirst.frc.team6135.robot;
 import com.kauailabs.navx.frc.AHRS;
-<<<<<<< HEAD
-<<<<<<< HEAD
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
-=======
-=======
->>>>>>> parent of c6097e1... Added Comments Debug
 import com.ctre.CANTalon;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Encoder;
@@ -18,26 +13,14 @@ import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.SPI;
-<<<<<<< HEAD
->>>>>>> parent of c6097e1... Added Comments Debug
-=======
->>>>>>> parent of c6097e1... Added Comments Debug
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-<<<<<<< HEAD
-<<<<<<< HEAD
 /**
  This class handles the driving mechanism of the robot. It uses navX to adjust its position
  Creater: Adrian Carpenter 
  */
-=======
-
->>>>>>> parent of c6097e1... Added Comments Debug
-=======
-
->>>>>>> parent of c6097e1... Added Comments Debug
 public class Drive implements PIDOutput {
 	//Variables used
 	private double rSpeed = 0.0;
@@ -113,19 +96,6 @@ public class Drive implements PIDOutput {
 		balance.setAbsoluteTolerance(kToleranceDegreesR);
 		straight = false;
 	}
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
-	//public void test() {
-	//	test.set(0.3);
-	//}
->>>>>>> parent of c6097e1... Added Comments Debug
-=======
-	//public void test() {
-	//	test.set(0.3);
-	//}
->>>>>>> parent of c6097e1... Added Comments Debug
 	public void setStraight() {
 		ahrs.reset();
 		balance.setPID(kPS, kIS, kDS);
