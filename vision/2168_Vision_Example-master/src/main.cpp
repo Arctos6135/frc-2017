@@ -36,7 +36,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 #include <sstream>
 #include <unistd.h>
 #include <pthread.h>
-//#include "WPILib.h"
 #include "NetworkTable.h"
 
 using namespace cv;

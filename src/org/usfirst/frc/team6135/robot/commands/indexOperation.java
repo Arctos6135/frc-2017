@@ -15,25 +15,23 @@ import org.usfirst.frc.team6135.robot.Robot;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
-<<<<<<< HEAD
  * This command will start the indexer
  * Activated by: Command SIOperation
  * Creater: Carl Yu
-=======
- *
->>>>>>> parent of c6097e1... Added Comments Debug
  */
 public class indexOperation extends Command {
 
     public double targetRPM=-1;
     public double adjustVal=0;
+    public boolean c;
     public indexOperation() {
         requires(Robot.indexer);
     }
-    public indexOperation(double s)
+    public indexOperation(double s,boolean f)
     {
     	requires(Robot.indexer);
     	this.targetRPM=s;
+    	this.c=f;
     	
     }
     // Called just before this Command runs the first time
@@ -42,6 +40,14 @@ public class indexOperation extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	if(c)
+    	{
+        	autoShoot();
+    	}
+    	else
+    	{
+    		Robot.indexer.set(-1);
+    	}
     }
     protected void autoShoot()
     {
@@ -51,7 +57,7 @@ public class indexOperation extends Command {
     	}
     	else
     	{
-    		if(Robot.indexer.getVel()<(targetRPM+adjustVal)*1.03 && Robot.indexer.getVel()>(targetRPM+adjustVal)*0.97)
+    		if(Robot.indexer.getVel()<(targetRPM+adjustVal)*1.03 /*&& Robot.indexer.getVel()>(targetRPM+adjustVal)*0.97*/)
     		{
     			Robot.indexer.set(1);
     		}

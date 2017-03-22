@@ -14,28 +14,27 @@ import org.usfirst.frc.team6135.robot.Robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
-<<<<<<< HEAD
  * This command will start the shooter
  * Activated by: Operator Joystick, toggled
  * Creater: Carl Yu
-=======
- *
->>>>>>> parent of c6097e1... Added Comments Debug
  */
 public class shooterOperation extends Command {
 	public double targetRPM;
 	public double adjustVal;
+	public boolean c;
 	public Joystick operatorJ;
 	public shooterOperation() {
         requires(Robot.shooter);
     }
-	public shooterOperation(double v, Joystick j)
+	public shooterOperation(double v, Joystick j,boolean f)
 	{
 		requires(Robot.shooter);
 		this.targetRPM=v;
 		this.operatorJ=j;
+		this.c=f;
 	}
     // Called just before this Command runs the first time
     protected void initialize() {
@@ -45,7 +44,16 @@ public class shooterOperation extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	autoShoot();
+    	if(c)
+    	{
+        	autoShoot();
+    	}
+    	else
+    	{
+    		Robot.shooter.set(1);
+    	}
+    	
+    	printToSmartDashboard();
     }
     protected void autoShoot()
     {
@@ -55,7 +63,7 @@ public class shooterOperation extends Command {
     	}
     	else
     	{
-    		if(Robot.shooter.getVel()<(targetRPM+adjustVal)*1.03 && Robot.shooter.getVel()>(targetRPM+adjustVal)*0.97)
+    		if(Robot.shooter.getVel()<(targetRPM+adjustVal)*1.03/*Robot.shooter.getVel()>(targetRPM+adjustVal)*0.97*/)
     		{
     			Robot.shooter.set(1);
     		}
@@ -101,9 +109,10 @@ public class shooterOperation extends Command {
     {
     	this.targetRPM=v;
     }
-    public String toString()
+    public void printToSmartDashboard()
     {
-    	return "targetRPM: "+targetRPM+" "+"adjustVal: "+adjustVal;
+    	SmartDashboard.putNumber("TargetRPM: ", targetRPM);
+    	SmartDashboard.putNumber("AdjustVal",adjustVal);
     }
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {

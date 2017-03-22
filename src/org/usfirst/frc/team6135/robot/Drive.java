@@ -4,15 +4,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
-import com.ctre.CANTalon;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.I2C;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.PIDController;
-import edu.wpi.first.wpilibj.PIDOutput;
-import edu.wpi.first.wpilibj.PIDSource;
-import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -75,7 +66,7 @@ public class Drive implements PIDOutput {
 		leftDrive.setInverted(lReverse);
 		rightDrive.setInverted(rReverse);
 		try {
-			ahrs = new AHRS(SerialPort.Port.kUSB1);
+			ahrs = new AHRS(SerialPort.Port.kUSB);
 			SmartDashboard.putString("NAVX", "Not RIP?");
         } catch (RuntimeException ex ) {
             DriverStation.reportError("Error instantiating navX MXP:  " + ex.getMessage(), true);
@@ -96,6 +87,9 @@ public class Drive implements PIDOutput {
 		balance.setAbsoluteTolerance(kToleranceDegreesR);
 		straight = false;
 	}
+	//public void test() {
+	//	test.set(0.3);
+	//}
 	public void setStraight() {
 		ahrs.reset();
 		balance.setPID(kPS, kIS, kDS);

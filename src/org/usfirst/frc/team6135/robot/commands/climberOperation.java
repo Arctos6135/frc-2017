@@ -5,13 +5,9 @@ import org.usfirst.frc.team6135.robot.Robot;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
-<<<<<<< HEAD
  * This command will start the climber
  * Activated by: Operator Joystick, toggled
  * Creater: Carl Yu
-=======
- *
->>>>>>> parent of c6097e1... Added Comments Debug
  */
 public class climberOperation extends Command {
 
@@ -34,7 +30,7 @@ public class climberOperation extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return Robot.climber.getCurrent()>=STALLING_CURRENT;
+        return false;//Robot.climber.getCurrent()>=STALLING_CURRENT;
     }
 
     // Called once after isFinished returns true

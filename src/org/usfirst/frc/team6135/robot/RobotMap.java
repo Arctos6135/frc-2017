@@ -35,6 +35,11 @@ public class RobotMap {
 	//Photoelectric sensor
 	public static final int photoElectricSensor = 4;
 	
+	//Vision
+	public static final double targetHeight = 0.4;
+	public static final double cameraLensAngle = 32.5;
+	public static final int yResolution = 240;
+	public static final int xResolution = 320;	
 	//subsystem motor control
 	public static CANTalon intakeTalon;
     public static CANTalon indexerTalon;

@@ -1,5 +1,4 @@
 package org.usfirst.frc.team6135.robot;
-import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
@@ -7,36 +6,15 @@ import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import com.ctre.CANTalon;
-import com.ctre.CANTalon.FeedbackDevice;
-
-import edu.wpi.first.wpilibj.CameraServer;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DigitalOutput;
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
-import edu.wpi.first.wpilibj.Spark;
-import edu.wpi.first.wpilibj.Victor;
-import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import edu.wpi.first.wpilibj.livewindow.LiveWindowSendable;
-
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team6135.robot.subsystems.AutoDrive;
 import org.usfirst.frc.team6135.robot.subsystems.Climber;
-import org.usfirst.frc.team6135.robot.subsystems.ExampleSubsystem;
-
-import org.usfirst.frc.team6135.robot.subsystems.ExampleSubsystem;
-
 import org.usfirst.frc.team6135.robot.subsystems.Indexer;
 import org.usfirst.frc.team6135.robot.subsystems.Intake;
 import org.usfirst.frc.team6135.robot.subsystems.Shooter;
-
+import org.usfirst.frc.team6135.robot.subsystems.Vision;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -54,14 +32,30 @@ public class Robot extends IterativeRobot {
     public static Climber climber;
     //public static JetsonComm jetson;
     public Joystick j;
+    public static Vision vision = new Vision();
 	public static Drive drive;
 	public static AutoDrive auto;
 	Command autonomousCommand;
 	SendableChooser<Command> chooser;
 	public static PowerDistributionPanel pdp;
-	CameraServer server = null;
+	//CameraServer server = null;
 	DigitalOutput photoSensor = null;
 	int counter;
+	/*public UsbCamera gearCamera;
+	public UsbCamera shooterCamera;
+	public static final double shooterTargetHeight = 4.0; //inches
+	public static final double gearTargetHeight = 5.0; //inches
+	private static final int img_width = 320;
+	private static final int img_height = 240;
+	private static final double cameraFOV = 68.5;
+	public static double gearDistance = 0.0;
+	public static double gearCenterX = 0.0;
+	public static double shooterDistance = 0.0;
+	public static double shooterCenterX = 0.0;
+	public static double shooterRPM=0.0;
+	public Object imgLock;
+	public VisionThread gearVisionThread;
+	public VisionThread shooterVisionThread;*/
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
@@ -69,25 +63,21 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void robotInit() {
-		server = CameraServer.getInstance();
-		server.startAutomaticCapture();
-		//server.startAutomaticCapture().setResolution(1920, 1080);
-		server.getVideo();
-		
 		RobotMap.init();
-		shooter=new Shooter();
+		shooter = new Shooter();
 		indexer= new Indexer();
 		intake = new Intake();
 		climber = new Climber();
 		drive=new Drive(OI.j, RobotMap.lVicPort, RobotMap.rVicPort);
-		//drive.reverse();
+		drive.reverse();
 		auto = new AutoDrive(RobotMap.lEnc1, RobotMap.lEnc2, RobotMap.rEnc1, RobotMap.rEnc2, drive);
-		//auto.reverse();
+		auto.reverse();
 		oi = new OI();
 		j=OI.j;
 		chooser=  new SendableChooser<Command>();
 		pdp = new PowerDistributionPanel();
 		photoSensor = new DigitalOutput(RobotMap.photoElectricSensor);
+		vision.startVisionProcessing();
 		//chooser.addDefault("Default Auto", new ExampleCommand());
 		//chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", chooser);
@@ -221,7 +211,12 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("Temperature: ", pdp.getTemperature());
 		SmartDashboard.putNumber("Right Encoder", auto.getRateR());
 		SmartDashboard.putNumber("Left Encoder", auto.getRateL());
-		SmartDashboard.putBoolean("PhotoSensor", photoSensor.get());
+		SmartDashboard.putBoolean("PhotoSensor", !photoSensor.get());
+		/*SmartDashboard.putNumber("Shooter Distance:", shooterDistance);
+		SmartDashboard.putNumber("Shooter Centre:", shooterCenterX);
+		SmartDashboard.putNumber("Gear Distance:", gearDistance);
+		SmartDashboard.putNumber("Gear Center:", gearCenterX);*/
+		vision.updateStatus();
 		drive.printValues();
 		auto.printValues();
 		climber.printToSmartDashboard();

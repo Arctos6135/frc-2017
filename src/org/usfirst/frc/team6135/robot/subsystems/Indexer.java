@@ -67,6 +67,7 @@ public class Indexer extends Subsystem {
     }
     public double getVel()
     {
+    	System.out.println(talon.getEncPosition());
     	return talon.getEncVelocity();
     }
     public void setOn(boolean val)

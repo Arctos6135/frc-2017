@@ -10,18 +10,27 @@ import edu.wpi.first.wpilibj.command.Command;
 public class DriveDistance extends Command {
 	private AutoDrive auto;
 	private double dist;
+	private double speed;
     public DriveDistance(AutoDrive a, double d) {
     	requires(a);
     	auto = a;
     	dist = d;
+    	speed = 1.0;
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     }
-
+    public DriveDistance(AutoDrive a, double d, double s) {
+    	requires(a);
+    	auto = a;
+    	dist = d;
+    	speed = s;
+        // Use requires() here to declare subsystem dependencies
+        // eg. requires(chassis);
+    }
     // Called just before this Command runs the first time
     protected void initialize() {
     	auto.enable();
-    	auto.setStraight();
+    	auto.setStraight(speed);
     	auto.setSetpoint(dist);
     	auto.drive.balance.enable();
     	auto.drive.setStraight();

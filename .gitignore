@@ -16,8 +16,6 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
-# JDT-specific (Eclipse Java Development Tools)
-.classpath
 
 # =========================
 # Operating System Files

@@ -8,13 +8,9 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
-<<<<<<< HEAD
  * This command will start the shooter (DEBUG CLASS)
  * Activated by: SmartDashboard
  * Creater: Carl Yu
-=======
- *
->>>>>>> parent of c6097e1... Added Comments Debug
  */
 public class AutoDrive extends PIDSubsystem {
 	//Constants
@@ -28,7 +24,7 @@ public class AutoDrive extends PIDSubsystem {
     private static final double kDR = 0.00;
 	private static final double kToleranceDegreesR = 2.0f;
 	
-	private static final double encDist = 0.5 * 3.14/(48*48);
+	private static final double encDist = 0.5 * 3.14/(48*48); // inches
 	
 	private static final boolean lReverse = true;
 	private static final boolean rReverse = false;
@@ -62,6 +58,13 @@ public class AutoDrive extends PIDSubsystem {
     	rightEnc.reset();
     	straight = true;
     	this.getPIDController().setPID(kPD, kID, kDD);
+    	this.getPIDController().setAbsoluteTolerance(kToleranceDegreesD);
+    }
+    public void setStraight(double factor) {
+    	leftEnc.reset();
+    	rightEnc.reset();
+    	straight = true;
+    	this.getPIDController().setPID(factor * kPD, factor * kID, factor * kDD);
     	this.getPIDController().setAbsoluteTolerance(kToleranceDegreesD);
     }
     public void setRotate() {
@@ -104,14 +107,17 @@ public class AutoDrive extends PIDSubsystem {
 	}
 	public double getDisR()
 	{
+		System.out.println(rightEnc.getDistance());
 		return rightEnc.getDistance();
 	}
 	public double getRateL()
 	{
+		
 		return rightEnc.getRate();
 	}
 	public double getDisL()
 	{
+		System.out.println(leftEnc.getDistance());
 		return leftEnc.getDistance();
 	}
 	public void reverse() {
