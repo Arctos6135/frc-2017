@@ -1,4 +1,4 @@
-package org.usfirst.frc.team6135.robot.commands;
+package org.usfirst.frc.team6135.robot.commands.reserved;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 

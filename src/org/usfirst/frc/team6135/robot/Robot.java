@@ -25,6 +25,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team6135.robot.commands.*;
 import org.usfirst.frc.team6135.robot.subsystems.*;
+import org.usfirst.frc.team6135.robot.subsystems.reserved.FuelIndexer;
+import org.usfirst.frc.team6135.robot.subsystems.reserved.FuelIntake;
+import org.usfirst.frc.team6135.robot.subsystems.reserved.Shooter;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -38,13 +41,16 @@ public class Robot extends IterativeRobot {
     Command autonomousCommand;
     //Command AUTOSecondGear;
     
-
+    
+    public static final boolean useNavx=false;
+    public static final boolean useGyro=false;
+    public static final boolean useEncoder=false;
+    
     public static OI oi;
     public static Gear gear;
     public static FuelIntake fuelIntake;
     public static FuelIndexer fuelIndexer;
     public static Climber climber;
-    public static Drivetrain drivetrain;
     public static Miscallaneous miscallaneous;
     public static Shooter shooter;
     public static EncSensor lEncSubsystem;
@@ -61,23 +67,24 @@ public class Robot extends IterativeRobot {
      */
     public void robotInit() {
     	RobotMap.init();
+        //fuelIntake = new FuelIntake();
+        //fuelIndexer = new FuelIndexer();
+        //shooter = new Shooter();
+    	
         gear = new Gear();
-        fuelIntake = new FuelIntake();
-        fuelIndexer = new FuelIndexer();
         climber = new Climber();
+        
         drive=new Drive();
         lEncSubsystem=new EncSensor(RobotMap.leftEncoder, false);
         rEncSubsystem=new EncSensor(RobotMap.rightEncoder,true);
+        
         miscallaneous = new Miscallaneous();
-        shooter = new Shooter();
         camera = CameraServer.getInstance().startAutomaticCapture(0);
         autoChooser = new SendableChooser<CommandGroup>();
-        autoChooser.addDefault("DrivePastBaseLine", new DrivePastBaseLine());
-        autoChooser.addObject("CenterGearDeposit", new CenterGearDeposit());
-        autoChooser.addObject("FarPositionDepositGear", new FarPositionDepositGear());
-        autoChooser.addObject("NearCollectBall", new NearCollectBall());
-        autoChooser.addObject("NearPositionDepositGear", new NearPositionDepositGear());
-        autoChooser.addObject("NearShoot", new NearShoot());
+        autoChooser.addDefault("DrivePastBaseLine", new DrivePastBaseLine(useNavx,useGyro, useEncoder));
+        autoChooser.addObject("CenterGearDeposit", new CenterGearDeposit(useNavx,useGyro, useEncoder));
+        autoChooser.addObject("FarPositionDepositGear", new FarPositionDepositGear(useNavx,useGyro, useEncoder));
+        autoChooser.addObject("NearPositionDepositGear", new NearPositionDepositGear(useNavx,useGyro, useEncoder));
     	SmartDashboard.putData("Auto Chooser", autoChooser);
         // OI must be constructed after subsystems. If the OI creates Commands
         //(which it very likely will), subsystems are not guaranteed to be
@@ -102,7 +109,7 @@ public class Robot extends IterativeRobot {
     }
 
     public void autonomousInit() {
-    	autonomousCommand=new driveDistance(35,0.6);
+    	autonomousCommand=new driveDistance(35,0.6,useNavx,useGyro,useEncoder);
     	if(autonomousCommand!=null) autonomousCommand.start();
     }
 

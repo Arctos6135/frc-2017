@@ -12,6 +12,10 @@
 package org.usfirst.frc.team6135.robot;
 
 import org.usfirst.frc.team6135.robot.commands.*;
+import org.usfirst.frc.team6135.robot.commands.reserved.operateIntake;
+import org.usfirst.frc.team6135.robot.commands.reserved.operateSI;
+import org.usfirst.frc.team6135.robot.commands.reserved.stopAllSubsystem;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;

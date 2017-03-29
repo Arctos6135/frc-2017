@@ -1,25 +1,27 @@
 package org.usfirst.frc.team6135.robot.commands;
 
 import org.usfirst.frc.team6135.robot.Robot;
+import org.usfirst.frc.team6135.robot.subsystems.EncSensor;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-/**
- *This command will reverse the control of the robot
- *Creator: Adrian Carpenter
- */
-public class Reverse extends Command {
-
-    public Reverse() {
+public class reverse extends Command {
+    public reverse() {
+		requires(Robot.lEncSubsystem);
+		requires(Robot.rEncSubsystem);
+		requires(Robot.drive);
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
-    	requires(Robot.auto);
     }
-
     // Called just before this Command runs the first time
     protected void initialize() {
-    	Robot.auto.reverse();
-    	Robot.drive.reverse();
+		Robot.lEncSubsystem.reverse();
+		Robot.rEncSubsystem.reverse();
+		EncSensor temp1 = Robot.lEncSubsystem;
+		EncSensor temp2 = Robot.rEncSubsystem;
+		Robot.lEncSubsystem = temp2;
+		Robot.rEncSubsystem = temp1;
+		Robot.drive.reverse();
     }
 
     // Called repeatedly when this Command is scheduled to run

@@ -9,27 +9,29 @@
 // it from being updated in the future.
 
 
-package org.usfirst.frc.team6135.robot.commands;
+package org.usfirst.frc.team6135.robot.commands.reserved;
 import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc.team6135.robot.Robot;
 
 /**
  *
  */
-public class operateIndexer extends Command {
+public class stopShooter extends Command {
 
-    public operateIndexer() {
-        requires(Robot.fuelIndexer);
+    public stopShooter() {
+
+        requires(Robot.shooter);
+
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	Robot.fuelIndexer.turnOn();
+    	Robot.shooter.turnOn();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.fuelIndexer.set(1.0);
+    	Robot.shooter.stop();
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -39,7 +41,7 @@ public class operateIndexer extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
-    	Robot.fuelIndexer.turnOff();
+    	Robot.shooter.turnOff();
     }
 
     // Called when another command which requires one or more of the same

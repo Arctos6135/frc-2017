@@ -9,10 +9,13 @@
 // it from being updated in the future.
 
 
-package org.usfirst.frc.team6135.robot.subsystems;
+package org.usfirst.frc.team6135.robot.subsystems.reserved;
 
 import org.usfirst.frc.team6135.robot.RobotMap;
 import org.usfirst.frc.team6135.robot.commands.*;
+import org.usfirst.frc.team6135.robot.commands.reserved.stopIndexer;
+import org.usfirst.frc.team6135.robot.subsystems.baseSubsystem;
+
 import com.ctre.CANTalon;
 import com.ctre.CANTalon.FeedbackDevice;
 

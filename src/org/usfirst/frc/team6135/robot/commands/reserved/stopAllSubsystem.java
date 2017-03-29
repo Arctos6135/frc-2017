@@ -1,4 +1,6 @@
-package org.usfirst.frc.team6135.robot.commands;
+package org.usfirst.frc.team6135.robot.commands.reserved;
+
+import org.usfirst.frc.team6135.robot.commands.stopClimber;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
